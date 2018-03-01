@@ -1,0 +1,87 @@
+---
+title: "Feb 13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+setwd("~/Documents/DATA Analysis")
+library(dplyr)
+library(reader)
+library(ggplot2)
+library(knitr)
+Birds <- read.csv("Birds.csv", stringsAsFactors = FALSE)
+BirdNames <- read.csv("BirdNames.csv", stringsAsFactors = FALSE)
+```
+
+```{r}
+Birds2 <- Birds %>% 
+  select(SpeciesName, Month, Day) %>% 
+  mutate(Month = as.numeric(as.character(Month)), Day = as.numeric(as.character(Day)))
+table(Birds$Month)
+```
+
+# Filter out the bad month
+
+```{r}
+Birds <- Birds %>% 
+  filter(Month < 25)
+table(Birds$Month)
+```
+
+# Let's clean up the bad spelling, First, count # distinct species
+
+```{r}
+n_distinct(BirdNames$SpeciesNameCleaned)
+length(BirdNames$SpeciesName)
+```
+
+
+# Join the two tables together because there are bad names. 
+```{r}
+Corrected <- Birds %>% 
+  inner_join(BirdNames)%>%
+  select(Species = SpeciesNameCleaned, Month, Day)%>%
+  na.omit()
+
+
+```
+# Let's display a table with Species and counts only. count the numbers of each species. 
+
+```{r}
+Count2 <- Corrected %>% 
+  group_by(Species)%>%
+  summarise(count = length(Species))%>% 
+  arrange(desc(count))
+```
+create a summary table and use count. count means picking names. 
+
+
+```{r}
+Major <- Corrected %>% 
+  group_by(Species) %>%
+  mutate(count = length(Species)) %>%
+  filter(count > 1000 )%>%
+  select(Species, Month, Day)
+```
+
+summarize create small table, mutate giant data set, and create new variable in that data set. 
+
+
+#Bar plot! 
+```{r}
+MajorMonthCount <- Major%>% 
+  group_by(Species, Month)%>%
+  summarise(count = length(Species))
+  
+```
+
+```{r}
+MajorMonthCount %>% ggplot(aes(Month,count, fill= Species)) + 
+  geom_bar(stat = "identity", position = "dodge") + 
+  facet_wrap(~Species)
+```
+
