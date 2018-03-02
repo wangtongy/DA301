@@ -84,9 +84,15 @@ MajorMonthCount %>% ggplot(aes(Month,count, fill= Species)) +
   geom_bar(stat = "identity", position = "dodge") + 
   facet_wrap(~Species)
 ```
-#Line Plot
+#Line Plot for a the month in terms of the count and fill with species
 ```{r}
 MajorMonthCount %>% ggplot(aes(Month, count, fill=Species))+ geom_line()+
   xlab("Month")+
-  ylab("Count")
+  ylab("Count") 
+
+
+:wq!
+:x!
+:x
+:q!
 
