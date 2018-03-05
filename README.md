@@ -1,7 +1,7 @@
 # DA301
-My first github assignment
- I love :coffee: :pizza: 
-I Love :dancer:
+CorneliaWang's first github assignment
+This Project is the Birdsname project. R based.  
+
 
 
 
